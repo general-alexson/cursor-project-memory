@@ -1,8 +1,8 @@
 {
   "name": "cursor-project-memory",
   "displayName": "Project Memory",
-  "description": "Project memory sidebar and sync with Cursor rules (.cursor/rules) so the AI has context.",
-  "version": "0.1.1",
+  "description": "Project memory sidebar: edit .cursor/rules/project-memory.mdc and project-completed.mdc (Cursor loads both as rules).",
+  "version": "0.2.0",
   "publisher": "cursor-project-memory",
   "repository": {
     "type": "git",
@@ -27,36 +27,41 @@
         "title": "Open Project Memory"
       },
       {
-        "command": "cursorProjectMemory.syncToCursorRules",
-        "title": "Sync Project Memory to Cursor Rules"
-      },
-      {
         "command": "cursorProjectMemory.addMemoryEntry",
         "title": "Add Memory Entry"
+      },
+      {
+        "command": "cursorProjectMemory.showHistory",
+        "title": "Show Memory History"
+      },
+      {
+        "command": "cursorProjectMemory.openGlobalMemory",
+        "title": "Open Global Memory"
+      },
+      {
+        "command": "cursorProjectMemory.addGlobalMemoryToWorkspace",
+        "title": "Add Global Memory to Workspace"
       }
     ],
     "configuration": {
       "title": "Project Memory",
       "properties": {
-        "cursorProjectMemory.memoryFilePath": {
-          "type": "string",
-          "default": "AI-MEMORY.md",
-          "description": "Path to the project memory file, relative to workspace root."
-        },
-        "cursorProjectMemory.completedFilePath": {
-          "type": "string",
-          "default": "COMPLETED-IMPLEMENTATIONS.md",
-          "description": "Path to the completed implementations log, relative to workspace root."
-        },
-        "cursorProjectMemory.syncToRules": {
+        "cursorProjectMemory.history.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "When syncing, write memory into .cursor/rules so Cursor loads it as a rule."
+          "description": "Save local history when project-memory.mdc is saved (for rollback)."
         },
-        "cursorProjectMemory.syncOnSave": {
+        "cursorProjectMemory.history.maxEntries": {
+          "type": "number",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Maximum number of history entries to keep."
+        },
+        "cursorProjectMemory.globalMemory.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically sync to Cursor rules when the memory or completed-implementations file is saved."
+          "description": "Show Global Memory in the sidebar (cross-workspace snippet library)."
         }
       }
     },
@@ -76,7 +81,7 @@
           "group": "inline"
         },
         {
-          "command": "cursorProjectMemory.syncToCursorRules",
+          "command": "cursorProjectMemory.showHistory",
           "when": "view == cursorProjectMemory.memoryView",
           "group": "inline"
         }

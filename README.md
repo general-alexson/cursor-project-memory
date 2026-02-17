@@ -4,37 +4,41 @@
 [![VS Code 1.85+](https://img.shields.io/badge/VS%20Code-1.85+-green)](https://code.visualstudio.com/)
 [![Cursor](https://img.shields.io/badge/Cursor-compatible-brightgreen)](https://cursor.com/)
 
-A Cursor/VS Code extension that adds a **Project Memory** sidebar and syncs your memory files into `.cursor/rules` so they are available as Cursor rules.
+A Cursor/VS Code extension that adds a **Project Memory** sidebar for `.cursor/rules/project-memory.mdc` and `project-completed.mdc`, plus **templates**, **local history**, and **global (cross-workspace) memory**.
 
 ## Features
 
-- **Project Memory view** — In the Explorer sidebar, a "Project Memory" section lists your project memory file and completed implementations file, plus a **Sync to Cursor Rules** action.
-- **Auto-sync on save** — When you save the memory or completed-implementations file, it is automatically synced to `.cursor/rules` (can be turned off in settings).
-- **Open / edit** — Click a file in the view to open it.
-- **Add Memory Entry** — Command to append a dated bullet to the memory file and focus the editor.
-- **Configurable paths** — Set `cursorProjectMemory.memoryFilePath` and `cursorProjectMemory.completedFilePath` (relative to workspace root).
+- **Project Memory view** — Lists `project-memory.mdc`, `project-completed.mdc`, and **Global memory** (cross-workspace). Click to open.
+- **Add Memory Entry** — Pick a template (Dated entry, Bugfix, Decision, Feature, Meeting notes); appends to `project-memory.mdc` with `{{date}}` filled in.
+- **Memory history** — Each save of `project-memory.mdc` creates a snapshot in `.cursor/project-memory-history/`. Use **Show Memory History** to pick a version to restore.
+- **Global memory** — A single file (in extension global storage) you can open from any workspace. Use **Add Global Memory to Workspace** to copy it into `.cursor/rules/global-memory.mdc` so Cursor loads it as a rule in the current project.
 
 ## Commands
 
 | Command | Description |
 |--------|-------------|
-| **Open Project Memory** | Open the project memory file. |
-| **Sync Project Memory to Cursor Rules** | Write memory into `.cursor/rules/project-memory.mdc`. |
-| **Add Memory Entry** | Append a new dated entry to the memory file and open it. |
+| **Open Project Memory** | Open `project-memory.mdc`. |
+| **Add Memory Entry** | Pick a template and append a dated entry to `project-memory.mdc`. |
+| **Show Memory History** | List snapshots and restore a previous version of `project-memory.mdc`. |
+| **Open Global Memory** | Open the cross-workspace global memory file (create if missing). |
+| **Add Global Memory to Workspace** | Copy global memory into `.cursor/rules/global-memory.mdc` for this workspace. |
 
 ## Configuration
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `cursorProjectMemory.memoryFilePath` | `AI-MEMORY.md` | Path to the project memory file (relative to workspace root). |
-| `cursorProjectMemory.completedFilePath` | `COMPLETED-IMPLEMENTATIONS.md` | Path to the completed implementations log. |
-| `cursorProjectMemory.syncToRules` | `true` | Reserved for future use. |
-| `cursorProjectMemory.syncOnSave` | `true` | Automatically sync to Cursor rules when the memory or completed-implementations file is saved. |
+| `cursorProjectMemory.history.enabled` | `true` | Save a snapshot when `project-memory.mdc` is saved. |
+| `cursorProjectMemory.history.maxEntries` | `20` | Maximum history snapshots to keep (1–100). |
+| `cursorProjectMemory.globalMemory.enabled` | `true` | Show **Global memory** in the sidebar. |
 
 ## Requirements
 
 - VS Code or Cursor `^1.85.0`
-- Single workspace folder (first folder is used as root)
+- Single workspace folder (first folder is used as root) for project memory and history; global memory works without a workspace.
+
+## Reporting issues
+
+[Open an issue](https://github.com/general-alexson/cursor-project-memory/issues) on GitHub to report bugs or request features.
 
 ## License
 
