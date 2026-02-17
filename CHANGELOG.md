@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-02-17
+
+### Added
+
+- **Assimilate existing memory files** — Command **Assimilate Existing Memory Files** looks for `AI-MEMORY.md` and `COMPLETED-IMPLEMENTATIONS.md` at the workspace root and merges their content into `project-memory.mdc` and `project-completed.mdc` with an "Imported from … (date)" section. Confirmation step before importing.
+
+### Fixed
+
+- ESLint: allow unused parameters prefixed with `_` (e.g. `_element` in tree provider) via `argsIgnorePattern` in `.eslintrc.json`.
+
 ## [0.2.0] - 2026-02-17
 
 ### Added
@@ -33,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Add Memory Entry** command — append dated entry to memory file
 - Configuration: `cursorProjectMemory.memoryFilePath`, `cursorProjectMemory.completedFilePath`, `cursorProjectMemory.syncToRules`
 
+[0.3.0]: https://github.com/general-alexson/cursor-project-memory/releases/tag/v0.3.0
 [0.2.0]: https://github.com/general-alexson/cursor-project-memory/releases/tag/v0.2.0
 [0.1.1]: https://github.com/general-alexson/cursor-project-memory/releases/tag/v0.1.1
 [0.1.0]: https://github.com/general-alexson/cursor-project-memory/releases/tag/v0.1.0

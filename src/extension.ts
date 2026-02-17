@@ -7,6 +7,12 @@ const COMPLETED_RULE_FILE = "project-completed.mdc";
 const GLOBAL_MEMORY_FILE = "global-memory.mdc";
 const HISTORY_DIR = ".cursor/project-memory-history";
 
+/** Candidate file names at workspace root to assimilate into .mdc rules. */
+const ASSIMILATE_CANDIDATES: { path: string; target: "memory" | "completed" }[] = [
+  { path: "AI-MEMORY.md", target: "memory" },
+  { path: "COMPLETED-IMPLEMENTATIONS.md", target: "completed" },
+];
+
 const BUILT_IN_TEMPLATES: { id: string; label: string; template: string }[] = [
   { id: "dated", label: "Dated entry", template: "\n## {{date}}\n- \n" },
   { id: "bugfix", label: "Bugfix", template: "\n## Bugfix: {{date}}\n- Issue: \n- Fix: \n" },
@@ -201,6 +207,59 @@ class ProjectMemoryTreeProvider implements vscode.TreeDataProvider<MemoryNode> {
   }
 }
 
+/** Find existing memory-style files at workspace root and merge their content into .mdc rule files. */
+async function assimilateMemoryFiles(): Promise<void> {
+  const root = getWorkspaceRoot();
+  if (!root) {
+    vscode.window.showWarningMessage("Project Memory: No workspace folder open.");
+    return;
+  }
+  const date = new Date().toISOString().slice(0, 10);
+  const found: { path: string; uri: vscode.Uri; target: "memory" | "completed" }[] = [];
+  for (const cand of ASSIMILATE_CANDIDATES) {
+    const uri = vscode.Uri.joinPath(root, ...cand.path.split(/[/\\]/));
+    try {
+      await vscode.workspace.fs.readFile(uri);
+      found.push({ path: cand.path, uri, target: cand.target });
+    } catch {
+      /* not found, skip */
+    }
+  }
+  if (found.length === 0) {
+    vscode.window.showInformationMessage(
+      "Project Memory: No existing memory files found at workspace root (e.g. AI-MEMORY.md, COMPLETED-IMPLEMENTATIONS.md)."
+    );
+    return;
+  }
+  const confirm = await vscode.window.showQuickPick(
+    [
+      { label: "Import all", description: `Merge ${found.map((f) => f.path).join(", ")} into project .mdc rules` },
+      { label: "Cancel", description: "Do nothing" },
+    ],
+    { title: "Assimilate existing memory files", placeHolder: "Choose an action" }
+  );
+  if (!confirm || confirm.label === "Cancel") return;
+
+  const memoryUri = getMemoryRuleUri();
+  const completedUri = getCompletedRuleUri();
+  if (!memoryUri || !completedUri) return;
+  await ensureRuleFileExists(memoryUri, "memory");
+  await ensureRuleFileExists(completedUri, "completed");
+
+  const imported: string[] = [];
+  for (const f of found) {
+    const content = await readFileSafe(f.uri);
+    if (!content.trim()) continue;
+    const targetUri = f.target === "memory" ? memoryUri : completedUri;
+    let existing = await readFileSafe(targetUri);
+    if (!existing.endsWith("\n")) existing += "\n";
+    const block = `\n## Imported from ${f.path} (${date})\n\n${content.trim()}\n\n`;
+    await vscode.workspace.fs.writeFile(targetUri, Buffer.from(existing + block, "utf8"));
+    imported.push(f.path);
+  }
+  vscode.window.showInformationMessage(`Project Memory: Imported ${imported.join(", ")} into .cursor/rules.`);
+}
+
 async function ensureRuleFileExists(uri: vscode.Uri, kind: "memory" | "completed"): Promise<void> {
   try {
     await vscode.workspace.fs.readFile(uri);
@@ -334,6 +393,13 @@ export function activate(context: vscode.ExtensionContext): void {
       const dest = vscode.Uri.joinPath(rulesDir, GLOBAL_MEMORY_FILE);
       await vscode.workspace.fs.writeFile(dest, Buffer.from(content, "utf8"));
       vscode.window.showInformationMessage("Project Memory: Global memory copied to .cursor/rules/global-memory.mdc (Cursor will load it as a rule).");
+      treeProvider.refresh();
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("cursorProjectMemory.assimilateMemoryFiles", async () => {
+      await assimilateMemoryFiles();
       treeProvider.refresh();
     })
   );
