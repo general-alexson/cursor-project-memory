@@ -1,0 +1,66 @@
+name: Build
+
+# Run only on full version tag push (vX.Y.Z), not convenience tags (v0.1, v0, latest).
+on:
+  push:
+    tags: ["v*.*.*"]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile
+        run: npm run compile
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Generate icon
+        run: npm run generate-icon
+
+      - name: Package VSIX
+        run: npx @vscode/vsce package --no-dependencies
+
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cursor-project-memory-${{ github.ref_name }}
+          path: "*.vsix"
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: self-hosted
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Download VSIX
+        uses: actions/download-artifact@v4
+        with:
+          name: cursor-project-memory-${{ github.ref_name }}
+
+      - name: Create Open VSX namespace
+        env:
+          OPEN_VSX_TOKEN: ${{ secrets.OPEN_VSX_TOKEN }}
+        run: npx ovsx create-namespace cursor-project-memory --pat "$OPEN_VSX_TOKEN"
+        continue-on-error: true
+
+      - name: Publish to Open VSX
+        env:
+          OPEN_VSX_TOKEN: ${{ secrets.OPEN_VSX_TOKEN }}
+        run: npx ovsx publish *.vsix --pat "$OPEN_VSX_TOKEN"

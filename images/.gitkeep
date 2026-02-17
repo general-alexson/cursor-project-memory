@@ -1,0 +1,2 @@
+# Run from repo root: npm run generate-icon
+# This creates icon.png (128×128 brain icon) for the extension marketplace.
