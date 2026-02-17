@@ -1,0 +1,90 @@
+{
+  "name": "cursor-project-memory",
+  "displayName": "Project Memory",
+  "description": "Project memory sidebar and sync with Cursor rules (.cursor/rules) so the AI has context.",
+  "version": "0.1.0",
+  "publisher": "cursor-project-memory",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/general-alexson/cursor-project-memory.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cursorProjectMemory.openMemory",
+        "title": "Open Project Memory"
+      },
+      {
+        "command": "cursorProjectMemory.syncToCursorRules",
+        "title": "Sync Project Memory to Cursor Rules"
+      },
+      {
+        "command": "cursorProjectMemory.addMemoryEntry",
+        "title": "Add Memory Entry"
+      }
+    ],
+    "configuration": {
+      "title": "Project Memory",
+      "properties": {
+        "cursorProjectMemory.memoryFilePath": {
+          "type": "string",
+          "default": "AI-MEMORY.md",
+          "description": "Path to the project memory file, relative to workspace root."
+        },
+        "cursorProjectMemory.completedFilePath": {
+          "type": "string",
+          "default": "COMPLETED-IMPLEMENTATIONS.md",
+          "description": "Path to the completed implementations log, relative to workspace root."
+        },
+        "cursorProjectMemory.syncToRules": {
+          "type": "boolean",
+          "default": true,
+          "description": "When syncing, write memory into .cursor/rules so Cursor loads it as a rule."
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "cursorProjectMemory.memoryView",
+          "name": "Project Memory"
+        }
+      ]
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "cursorProjectMemory.openMemory",
+          "when": "view == cursorProjectMemory.memoryView",
+          "group": "inline"
+        },
+        {
+          "command": "cursorProjectMemory.syncToCursorRules",
+          "when": "view == cursorProjectMemory.memoryView",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  }
+}
