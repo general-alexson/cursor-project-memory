@@ -74,11 +74,16 @@ async function buildRuleContent(memoryUri: vscode.Uri, completedUri: vscode.Uri)
   return parts.join("\n");
 }
 
+/** Normalize URI for comparison (no trailing slash). */
+function normalizeUri(uri: vscode.Uri): string {
+  return uri.toString().replace(/\/$/, "");
+}
+
 /** Write project memory into .cursor/rules/project-memory.mdc so Cursor loads it. */
-export async function syncToCursorRules(): Promise<boolean> {
+export async function syncToCursorRules(options?: { quiet?: boolean }): Promise<boolean> {
   const root = getWorkspaceRoot();
   if (!root) {
-    vscode.window.showWarningMessage("Project Memory: No workspace folder open.");
+    if (!options?.quiet) vscode.window.showWarningMessage("Project Memory: No workspace folder open.");
     return false;
   }
 
@@ -88,7 +93,7 @@ export async function syncToCursorRules(): Promise<boolean> {
   const completedUri = resolveWorkspacePath(completedPath);
 
   if (!memoryUri) {
-    vscode.window.showWarningMessage("Project Memory: Could not resolve memory file path.");
+    if (!options?.quiet) vscode.window.showWarningMessage("Project Memory: Could not resolve memory file path.");
     return false;
   }
 
@@ -102,9 +107,11 @@ export async function syncToCursorRules(): Promise<boolean> {
   const bytes = Buffer.from(content, "utf8");
   await vscode.workspace.fs.writeFile(ruleFileUri, bytes);
 
-  vscode.window.showInformationMessage(
-    "Project Memory synced to .cursor/rules/project-memory.mdc — Cursor will use it as a rule."
-  );
+  if (!options?.quiet) {
+    vscode.window.showInformationMessage(
+      "Project Memory synced to .cursor/rules/project-memory.mdc — Cursor will use it as a rule."
+    );
+  }
   return true;
 }
 
@@ -222,6 +229,24 @@ export function activate(context: vscode.ExtensionContext): void {
       await vscode.workspace.fs.writeFile(uri, Buffer.from(content, "utf8"));
       await vscode.window.showTextDocument(uri, { selection: new vscode.Range(content.length - 3, 0, content.length - 1, 0) });
       treeProvider.refresh();
+    })
+  );
+
+  // Auto-sync to Cursor rules when memory or completed file is saved
+  context.subscriptions.push(
+    vscode.workspace.onDidSaveTextDocument((doc: vscode.TextDocument) => {
+      const syncOnSave = vscode.workspace.getConfiguration("cursorProjectMemory").get<boolean>("syncOnSave");
+      if (!syncOnSave || !doc.uri) return;
+      const memoryUri = resolveWorkspacePath(getMemoryFilePath());
+      const completedUri = resolveWorkspacePath(getCompletedFilePath());
+      const normalized = normalizeUri(doc.uri);
+      if (memoryUri && normalizeUri(memoryUri) === normalized) {
+        syncToCursorRules({ quiet: true }).then((ok) => ok && treeProvider.refresh());
+        return;
+      }
+      if (completedUri && normalizeUri(completedUri) === normalized) {
+        syncToCursorRules({ quiet: true }).then((ok) => ok && treeProvider.refresh());
+      }
     })
   );
 

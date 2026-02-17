@@ -9,6 +9,7 @@ A Cursor/VS Code extension that adds a **Project Memory** sidebar and syncs your
 ## Features
 
 - **Project Memory view** — In the Explorer sidebar, a "Project Memory" section lists your project memory file and completed implementations file, plus a **Sync to Cursor Rules** action.
+- **Auto-sync on save** — When you save the memory or completed-implementations file, it is automatically synced to `.cursor/rules` (can be turned off in settings).
 - **Open / edit** — Click a file in the view to open it.
 - **Add Memory Entry** — Command to append a dated bullet to the memory file and focus the editor.
 - **Configurable paths** — Set `cursorProjectMemory.memoryFilePath` and `cursorProjectMemory.completedFilePath` (relative to workspace root).
@@ -28,6 +29,7 @@ A Cursor/VS Code extension that adds a **Project Memory** sidebar and syncs your
 | `cursorProjectMemory.memoryFilePath` | `AI-MEMORY.md` | Path to the project memory file (relative to workspace root). |
 | `cursorProjectMemory.completedFilePath` | `COMPLETED-IMPLEMENTATIONS.md` | Path to the completed implementations log. |
 | `cursorProjectMemory.syncToRules` | `true` | Reserved for future use. |
+| `cursorProjectMemory.syncOnSave` | `true` | Automatically sync to Cursor rules when the memory or completed-implementations file is saved. |
 
 ## Requirements
 

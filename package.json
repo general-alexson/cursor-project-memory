@@ -2,7 +2,7 @@
   "name": "cursor-project-memory",
   "displayName": "Project Memory",
   "description": "Project memory sidebar and sync with Cursor rules (.cursor/rules) so the AI has context.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "cursor-project-memory",
   "repository": {
     "type": "git",
@@ -52,6 +52,11 @@
           "type": "boolean",
           "default": true,
           "description": "When syncing, write memory into .cursor/rules so Cursor loads it as a rule."
+        },
+        "cursorProjectMemory.syncOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically sync to Cursor rules when the memory or completed-implementations file is saved."
         }
       }
     },
