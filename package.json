@@ -2,7 +2,7 @@
   "name": "cursor-project-memory",
   "displayName": "Project Memory",
   "description": "Project memory sidebar: edit .cursor/rules/project-memory.mdc and project-completed.mdc (Cursor loads both as rules).",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "publisher": "cursor-project-memory",
   "repository": {
     "type": "git",
@@ -45,6 +45,10 @@
       {
         "command": "cursorProjectMemory.assimilateMemoryFiles",
         "title": "Assimilate Existing Memory Files"
+      },
+      {
+        "command": "cursorProjectMemory.importCursorrulesIntoGlobalMemory",
+        "title": "Import .cursorrules into Global Memory"
       }
     ],
     "configuration": {
@@ -82,17 +86,17 @@
         {
           "command": "cursorProjectMemory.openMemory",
           "when": "view == cursorProjectMemory.memoryView",
-          "group": "inline"
+          "group": "1_navigation"
         },
         {
           "command": "cursorProjectMemory.showHistory",
           "when": "view == cursorProjectMemory.memoryView",
-          "group": "inline"
+          "group": "1_navigation"
         },
         {
           "command": "cursorProjectMemory.assimilateMemoryFiles",
           "when": "view == cursorProjectMemory.memoryView",
-          "group": "inline"
+          "group": "1_navigation"
         }
       ]
     }

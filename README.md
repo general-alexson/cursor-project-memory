@@ -10,11 +10,12 @@ A Cursor/VS Code extension that adds a **Project Memory** sidebar for `.cursor/r
 
 ## Features
 
-- **Project Memory view** — Lists `project-memory.mdc`, `project-completed.mdc`, and **Global memory** (cross-workspace). Click to open.
+- **Project Memory view** — Lists `project-memory.mdc`, `project-completed.mdc`, and **Global memory** (cross-workspace). Single-click a file to open it; right-click for other commands.
 - **Add Memory Entry** — Pick a template (Dated entry, Bugfix, Decision, Feature, Meeting notes); appends to `project-memory.mdc` with `{{date}}` filled in.
 - **Memory history** — Each save of `project-memory.mdc` creates a snapshot in `.cursor/project-memory-history/`. Use **Show Memory History** to pick a version to restore.
 - **Global memory** — A single file (in extension global storage) you can open from any workspace. Use **Add Global Memory to Workspace** to copy it into `.cursor/rules/global-memory.mdc` so Cursor loads it as a rule in the current project.
 - **Assimilate existing memory files** — If you have `AI-MEMORY.md` or `COMPLETED-IMPLEMENTATIONS.md` at the workspace root, run **Assimilate Existing Memory Files** to merge their content into `project-memory.mdc` and `project-completed.mdc` (with an "Imported from …" header). No need to migrate by hand.
+- **Import .cursorrules into global memory** — Run **Import .cursorrules into Global Memory** to append your workspace `.cursorrules` into global memory (with an "Imported from .cursorrules (date)" section) so you can reuse those rules across projects.
 
 ## Commands
 
@@ -26,6 +27,7 @@ A Cursor/VS Code extension that adds a **Project Memory** sidebar for `.cursor/r
 | **Open Global Memory** | Open the cross-workspace global memory file (create if missing). |
 | **Add Global Memory to Workspace** | Copy global memory into `.cursor/rules/global-memory.mdc` for this workspace. |
 | **Assimilate Existing Memory Files** | Find `AI-MEMORY.md` / `COMPLETED-IMPLEMENTATIONS.md` at workspace root and merge into project .mdc rules. |
+| **Import .cursorrules into Global Memory** | Append workspace `.cursorrules` into global memory (with dated section). |
 
 ## Configuration
 

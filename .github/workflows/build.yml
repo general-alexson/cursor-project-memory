@@ -54,11 +54,15 @@ jobs:
         with:
           name: cursor-project-memory-${{ github.ref_name }}
 
-      - name: Create Open VSX namespace
+      - name: Create Open VSX namespace (if missing)
         env:
           OPEN_VSX_TOKEN: ${{ secrets.OPEN_VSX_TOKEN }}
-        run: npx ovsx create-namespace cursor-project-memory --pat "$OPEN_VSX_TOKEN"
-        continue-on-error: true
+        run: |
+          if ! curl -sf -o /dev/null "https://open-vsx.org/api/cursor-project-memory"; then
+            npx ovsx create-namespace cursor-project-memory --pat "$OPEN_VSX_TOKEN"
+          else
+            echo "Namespace cursor-project-memory already exists, skipping create."
+          fi
 
       - name: Publish to Open VSX
         env:

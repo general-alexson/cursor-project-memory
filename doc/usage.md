@@ -30,11 +30,11 @@ The first time you open **project-memory.mdc** or **project-completed.mdc**, the
 
 | Item | Action |
 |------|--------|
-| **project-memory.mdc** | Click to open. This is the main “active memory” rule Cursor uses. |
-| **project-completed.mdc** | Click to open. Use it for things you’ve finished and want to reference later. |
+| **project-memory.mdc** | Single-click to open. This is the main “active memory” rule Cursor uses. |
+| **project-completed.mdc** | Single-click to open. Use it for things you’ve finished and want to reference later. |
 | **Global memory** | Click to open the cross-workspace file (stored in extension global storage). |
 
-Right‑click in the view for context commands (e.g. Open Project Memory, Show Memory History, Assimilate Existing Memory Files).
+Other commands (Open Project Memory, Show Memory History, Assimilate, Import .cursorrules into Global Memory) are available via **right-click** on any item or from the Command Palette. They do not appear as hover buttons, so a single click on a file always opens it.
 
 ---
 
@@ -100,6 +100,16 @@ If you already have **AI-MEMORY.md** or **COMPLETED-IMPLEMENTATIONS.md** (or sim
 
 Use this when moving from an “AI-MEMORY.md + COMPLETED-IMPLEMENTATIONS.md” workflow to the `.mdc` rule files.
 
+### Import .cursorrules into Global Memory
+
+If you have a **.cursorrules** file at the **workspace root**, this command appends its content into **global memory** so you can reuse those rules across projects.
+
+1. Run **Project Memory: Import .cursorrules into Global Memory** (Command Palette or right-click in the Project Memory view).
+2. The extension reads `.cursorrules` and appends it to global memory under **## Imported from .cursorrules (YYYY-MM-DD)**.
+3. The global memory file is opened. Existing content is kept; the `.cursorrules` content is added below.
+
+Use this to move workspace rules (e.g. docs, versioning, security) into global memory so they can be loaded in any project via **Add Global Memory to Workspace**.
+
 ---
 
 ## Configuration
@@ -132,7 +142,7 @@ Change these in **Settings** (UI or `settings.json`) under the “Project Memory
 
 ### Using global memory across projects
 
-1. Run **Open Global Memory** and add snippets or patterns you reuse (e.g. “How we do auth”, “Deploy checklist”).
+1. Run **Open Global Memory** and add snippets or patterns you reuse. You can also run **Import .cursorrules into Global Memory** once (with a workspace that has `.cursorrules`) to pull those rules into global memory (e.g. “How we do auth”, “Deploy checklist”).
 2. In any project where you want that context as a rule, run **Add Global Memory to Workspace**.
 3. Cursor will load **.cursor/rules/global-memory.mdc** for that workspace. Update it by editing global memory and running **Add Global Memory to Workspace** again when you want to refresh.
 

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-02-17
+
+### Fixed
+
+- Publish workflow: check if Open VSX namespace exists (via API) before creating it; skip create when it already exists.
+
+## [0.3.1] - 2026-02-17
+
+### Added
+
+- **Import .cursorrules into Global Memory** — Command appends workspace root `.cursorrules` into global memory with a dated section so you can reuse rules across projects.
+
+### Fixed
+
+- Sidebar: actions moved from inline (hover) to context menu so **single-click** on a file opens it; right-click for other commands.
+
 ## [0.3.0] - 2026-02-17
 
 ### Added
@@ -43,6 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Add Memory Entry** command — append dated entry to memory file
 - Configuration: `cursorProjectMemory.memoryFilePath`, `cursorProjectMemory.completedFilePath`, `cursorProjectMemory.syncToRules`
 
+[0.3.2]: https://github.com/general-alexson/cursor-project-memory/releases/tag/v0.3.2
+[0.3.1]: https://github.com/general-alexson/cursor-project-memory/releases/tag/v0.3.1
 [0.3.0]: https://github.com/general-alexson/cursor-project-memory/releases/tag/v0.3.0
 [0.2.0]: https://github.com/general-alexson/cursor-project-memory/releases/tag/v0.2.0
 [0.1.1]: https://github.com/general-alexson/cursor-project-memory/releases/tag/v0.1.1

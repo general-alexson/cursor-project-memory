@@ -3,7 +3,7 @@
 ## Publish to Open VSX (e.g. for Cursor)
 
 1. Create an account and token at [open-vsx.org](https://open-vsx.org) (e.g. [user settings → tokens](https://open-vsx.org/user-settings/tokens)).
-2. Create the namespace (publisher) once:
+2. Create the namespace (publisher) once (or let the tag-triggered workflow do it — it checks if the namespace exists and only creates when missing):
 
    ```bash
    npx ovsx create-namespace cursor-project-memory --pat YOUR_TOKEN
