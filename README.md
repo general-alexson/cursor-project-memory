@@ -6,6 +6,8 @@
 
 A Cursor/VS Code extension that adds a **Project Memory** sidebar for `.cursor/rules/project-memory.mdc` and `project-completed.mdc`, plus **templates**, **local history**, and **global (cross-workspace) memory**.
 
+**[Usage guide](doc/usage.md)** — Commands, workflows, configuration, and tips.
+
 ## Features
 
 - **Project Memory view** — Lists `project-memory.mdc`, `project-completed.mdc`, and **Global memory** (cross-workspace). Click to open.
